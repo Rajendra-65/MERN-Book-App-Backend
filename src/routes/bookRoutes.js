@@ -5,7 +5,7 @@ import protectedRoute from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/upload",protectedRoute,async(req,res)=>{
+router.post("/",protectedRoute,async(req,res)=>{
     try{
         
         const { title , caption , rating , image } = req.body;
