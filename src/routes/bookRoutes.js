@@ -5,41 +5,38 @@ import protectedRoute from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/",protectedRoute,async(req,res)=>{
-    try{
-        console.log("code reached the post ")
-        const { title , caption , rating , image } = await req.body;
+router.post("/", protectedRoute, async (req, res) => {
+    try {
+        const { title, caption, rating, image } = req.body;
 
-        if(!image || !title || !caption || !rating ){
+        if (!image || !title || !caption || !rating) {
             return res.status(400).json({
-                message: "please provide all details"
-            })
+                message: "Please provide all details",
+            });
         }
 
-        // upload to cloudinary
+        // Upload to Cloudinary
         const result = await cloudinary.uploader.upload(image);
         const imageUrl = result.secure_url;
-        // Save to Db
+
+        // Save to DB
         const newBook = new Book({
             title,
             caption,
             rating,
             image: imageUrl,
-            user : req.user._id,
-    
-        })
+            user: req.user._id,
+        });
 
-        await newBook.save()
+        await newBook.save();
 
-        res.status(201).json(newBook)
-
-    }catch(e){
-        console.log("error in the creating book",e)
-        res.status(500).json({
-            message:e
-        })
+        res.status(201).json(newBook);
+    } catch (e) {
+        console.log("Error in creating book:", e);
+        res.status(500).json({ message: e.message });
     }
-})
+});
+
 
 // pagination => Infinite Scrolling
 router.get("/",protectedRoute, async(req,res) => {
