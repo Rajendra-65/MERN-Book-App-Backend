@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/", protectedRoute, async (req, res) => {
     try {
         const { title, caption, rating, image } = req.body;
-        const imageUrl = ""
+        let imageUrl = ""
 
         if (!image || !title || !caption || !rating) {
             return res.status(400).json({
