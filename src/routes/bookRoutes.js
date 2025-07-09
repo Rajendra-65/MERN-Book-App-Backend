@@ -8,6 +8,7 @@ const router = express.Router();
 router.post("/", protectedRoute, async (req, res) => {
     try {
         const { title, caption, rating, image } = req.body;
+        const imageUrl = ""
 
         if (!image || !title || !caption || !rating) {
             return res.status(400).json({
@@ -16,10 +17,16 @@ router.post("/", protectedRoute, async (req, res) => {
         }
 
         // Upload to Cloudinary
-        // const result = await cloudinary.uploader.upload(image);
-        // const imageUrl = result.secure_url;
+        try{
+            const result = await cloudinary.uploader.upload(image);
+            imageUrl = result.secure_url;
+        }catch(e){
+            console.log("error in the cloudinary",e)
+        }
+        
+        
 
-        const imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYqoKTu_o3Zns2yExbst2Co84Gpc2Q1RJbA&s"
+        // const imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYqoKTu_o3Zns2yExbst2Co84Gpc2Q1RJbA&s"
 
         // Save to DB
         const newBook = new Book({
