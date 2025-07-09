@@ -16,8 +16,10 @@ router.post("/", protectedRoute, async (req, res) => {
         }
 
         // Upload to Cloudinary
-        const result = await cloudinary.uploader.upload(image);
-        const imageUrl = result.secure_url;
+        // const result = await cloudinary.uploader.upload(image);
+        // const imageUrl = result.secure_url;
+
+        const imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYqoKTu_o3Zns2yExbst2Co84Gpc2Q1RJbA&s"
 
         // Save to DB
         const newBook = new Book({
