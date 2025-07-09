@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.post("/",protectedRoute,async(req,res)=>{
     try{
-        
-        const { title , caption , rating , image } = req.body;
+        console.log("code reached the post ")
+        const { title , caption , rating , image } = await req.body;
 
         if(!image || !title || !caption || !rating ){
             return res.status(400).json({
