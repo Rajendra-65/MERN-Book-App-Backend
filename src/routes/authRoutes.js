@@ -68,6 +68,7 @@ router.post("/register",async (req,res)=>{
 })
 
 router.post("/login",async (req,res)=>{
+
     try{
         const {email,password} = req.body;
         
@@ -81,13 +82,15 @@ router.post("/login",async (req,res)=>{
             message : "User does not exist"
         })
 
-        const isPasswordCorrect = await User.comparePassword(password)
+        const isPasswordCorrect = await user.comparePassword(password)
 
         if(!isPasswordCorrect) return res.status(400).json({
             message : "invalid Credentials"
         })
 
         const token = generateToken(user._id);
+
+        console.log("user and token is",user,token)
 
         res.status(200).json({
             token,
