@@ -65,7 +65,7 @@ router.get("/",protectedRoute, async(req,res) => {
             books,
             currentPage :page,
             totalBooks : totalBooks,
-            totalPages :Match.ceil(totalBooks / limit)
+            totalPages :Math.ceil(totalBooks / limit)
         })
     }catch(e){
         console.log("error in getting books",e)
