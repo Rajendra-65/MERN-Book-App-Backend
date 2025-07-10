@@ -12,10 +12,13 @@ const protectedRoute = async (req, res, next) => {
       });
     }
 
-    const token = authHeader.replace("Bearer ", "").trim();
+    const token = authHeader.replace("Bearer", "").trim();
+
+    console.log("TOken Extracted",token)
 
     // ✅ 2. Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded",decoded)
 
     // ✅ 3. Find the user
     const user = await User.findById(decoded.userId).select("-password");
