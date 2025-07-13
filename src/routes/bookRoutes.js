@@ -72,11 +72,9 @@ router.get("/",protectedRoute, async(req,res) => {
     }
 })
 
-router.get("/user/books",protectedRoute, async(req,res)=>{
+router.get("/:id",protectedRoute, async(req,res)=>{
     try{
-        const book = await Book.find({user:req.user._id}).sort({
-            createdAt : -1
-        });
+        const book = await Book.findById(req.params.id);
         if (!book) return res.status(404).json({
             message:"Book not found"
         })
@@ -107,5 +105,32 @@ router.get("/user/books",protectedRoute, async(req,res)=>{
         })
     }
 })
+
+router.get("/user/books", protectedRoute, async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+
+    const books = await Book.find({ user: req.user._id })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate("user", "username profileImage");
+
+    const totalBooks = await Book.countDocuments({ user: req.user._id });
+
+    res.status(200).json({
+      books,
+      currentPage: page,
+      totalBooks,
+      totalPages: Math.ceil(totalBooks / limit),
+    });
+  } catch (e) {
+    console.log("Error fetching user's books", e);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 
 export default router;
