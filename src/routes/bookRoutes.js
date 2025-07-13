@@ -72,9 +72,11 @@ router.get("/",protectedRoute, async(req,res) => {
     }
 })
 
-router.get("/:id",protectedRoute, async(req,res)=>{
+router.get("/user/books",protectedRoute, async(req,res)=>{
     try{
-        const book = await Book.findById(req.params.id);
+        const book = await Book.find({user:req.user._id}).sort({
+            createdAt : -1
+        });
         if (!book) return res.status(404).json({
             message:"Book not found"
         })
